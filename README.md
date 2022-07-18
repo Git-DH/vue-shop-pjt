@@ -1,4 +1,4 @@
-# vue-shop-pjt
+# vue-shop2-pjt
 
 ## Project setup
 ```
