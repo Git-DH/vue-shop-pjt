@@ -54,15 +54,16 @@
             <div class="col-auto" v-if="cate1 !== ''">
               <select class="form-select" v-model="cate2" @change="changeCate2">
                 <option :key="name" v-for="(value, name) of categoryObj[cate1]">{{ name }}</option>
+                                      <!-- 밸류값, key값 v-for of는 객체에 사용 -->
               </select>
             </div>
 
             <div class="col-auto" v-if="cate2 !== ''">
-              <select class="form-select" v-model="selectedCateId">
+              <select class="form-select" v-model="product.category_id">
                 <option :value="cate.id" :key="cate.id" v-for="cate in categoryObj[cate1][cate2]">{{ cate.value }}</option>
+                <!-- in은 배열에 사용 -->
               </select>
             </div>
-            {{  selectedCateId }}
           </div>
         </div>
       </div>
@@ -108,13 +109,12 @@ export default {
         add_delivery_price: 0,
         tags: '',
         outbound_days: 0,
-        category_id: 1,
+        category_id: '',
         seller_id: 1
-      },      
-      categoryObj: {},    
+      },
+      categoryObj: {},
       cate1: '',
       cate2: '',
-      selectedCateId: '',
     };
   },
   created() {
@@ -147,10 +147,10 @@ export default {
     },
     changeCate1() {
       this.cate2 = '';
-      this.selectedCateId = '';
+      this.product.category_id = '';
     },
     changeCate2() {
-      this.selectedCateId = '';
+      this.product.category_id = '';
     },
     productInsert() {
       if(this.product.product_name.trim() === '') {
@@ -168,11 +168,28 @@ export default {
         return this.$swal('배송료를 입력하세요.');
       }
 
+        if(this.product.category_id === '') {
+          return this.$swal('카테고리를 선택해주세요.')
+        }
+
       if(this.product.outbound_days === '' || this.product.outbound_days === 0) {
         this.$refs.outbound_days.focus();
         return this.$swal('출고일을 입력하세요.');
       }
 
+      this.$swal.fire({
+        title: '정말 등록 하시겠습니까?',
+        showCancelButton: true,
+        confirmButtonText: '생성',
+        cancelButtonText: '취소',
+      }).then(async result => {
+        if(result.isConfirmed) {
+          const res = this.$post('/api/productInsert', this.product);
+          console.log(res);
+          this.$swal.fire('저장되었습니다.' , '' , 'success');
+          this.$router.push( {path: '/sales'} );
+        }
+      })
     },
   }
 }
