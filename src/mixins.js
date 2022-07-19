@@ -13,6 +13,7 @@ export default {
         },
 
         async $get(url, param) {
+                // 문자열, 객체
             return (await axios.get(url, {
                 params: param
             }).catch(e => {
