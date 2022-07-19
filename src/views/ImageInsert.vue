@@ -5,7 +5,7 @@
       
       <div class="mb-3 row">
         <label class="col-md-3 col-form-label">제품ID</label>
-        <div class="col-md-9">{{ productId }}</div>
+        <div class="col-md-9">{{ productDetail.id }}</div>
       </div>
       
       <div class="mb-3 row">
@@ -87,25 +87,16 @@
 export default {
   data() {
     return {
-      productId: 0,
       productName: '',
       productDetail: {},
       productImage: []
     }
   },
   created() {
-    this.productId = this.$route.query.product_id;
-    this.getProductDetail();
+    this.productId = this.$route.query.product_id;    
+    this.productDetail = this.$store.state.sallerSelectedProduct;
   },
   methods: {
-    async getProductDetail() {
-      const productDetail = await this.$get(
-        '/api/productDetail', 
-        { productId: this.productId }
-        // $get(mixim)에 인자 2개를 보냄
-      );
-      console.log(productDetail);
-    }
   }
 }
 </script>
