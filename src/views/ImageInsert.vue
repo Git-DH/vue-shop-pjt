@@ -23,7 +23,7 @@
               v-for="item in productImage.filter(c => c.type === 1)">
               <div class="position-relative">
                 <img :src="`/static/img/${item.product_id}/${item.type}/${item.path}`" class="img-fluid">
-                <div class="position-absolute top-0 end-0" style="cursor:pointer;" @click="deleteImage(item.id)">X</div>
+                <div class="position-absolute top-0 end-0" style="cursor:pointer;" @click="deleteImage(item.id, item.product_id, item.type, item.path)">X</div>
               </div>
             </div>
 
@@ -52,7 +52,7 @@
               v-for="item in productImage.filter(c => c.type === 2)">
               <div class="position-relative">
                 <img :src="`/static/img/${item.product_id}/${item.type}/${item.path}`" class="img-fluid">
-                <div class="position-absolute top-0 end-0" style="cursor:pointer;" @click="deleteImage(item.id)">X</div>
+                <div class="position-absolute top-0 end-0" style="cursor:pointer;" @click="deleteImage(item.id, item.product_id, item.type, item.path)">X</div>
               </div>
             </div>
 
@@ -82,7 +82,7 @@
               v-for="item in productImage.filter(c => c.type === 3)">
               <div class="position-relative">
                 <img :src="`/static/img/${item.product_id}/${item.type}/${item.path}`" class="img-fluid">
-                <div class="position-absolute top-0 end-0" style="cursor:pointer;" @click="deleteImage(item.id)">X</div>
+                <div class="position-absolute top-0 end-0" style="cursor:pointer;" @click="deleteImage(item.id, item.product_id, item.type, item.path)">X</div>
               </div>
             </div>
 
@@ -121,8 +121,11 @@ export default {
     }
   },
   created() {
-    this.productId = this.$route.query.product_id;    
+    this.productId = this.$route.query.product_id;
     this.productDetail = this.$store.state.sallerSelectedProduct;
+    this.getProductImage();
+  },
+  updated() {
     this.getProductImage();
   },
   methods: {
@@ -137,9 +140,9 @@ export default {
       const {error} = await this.$post(`/api/upload/${this.productDetail.id}/${type}`, formData);
       console.log(error);
     },
-    async deleteImage(id) {
-      console.log(id);
-      this.delImage = await this.$delete(`/api/productImageDelete/${this.productDetail.id}`)
+    async deleteImage(id, productId, type, path) {
+      const result = this.delImage = await this.$delete(`/api/productImageDelete/${id}/${productId}/${type}/${path}`) // 위치 순선 잘 기억해야한다.
+      console.log(result);
     }
   }
 }
