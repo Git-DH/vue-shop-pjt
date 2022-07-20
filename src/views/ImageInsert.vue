@@ -97,6 +97,14 @@ export default {
     this.productDetail = this.$store.state.sallerSelectedProduct;
   },
   methods: {
+    async uploadFile(files, type){
+      console.log(files);
+      console.log(type);
+      const image = await this.$base64(files[0]);
+      const formData = { image };
+      const {error} = await this.$post(`/api/upload/${this.productDetail.id}/${type}`, formData);
+      console.log(error);
+    }
   }
 }
 </script>
