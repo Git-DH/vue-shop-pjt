@@ -17,7 +17,16 @@
         <label class="col-md-3 col-form-label">섬네일 이미지</label>
         <div class="col-md-9">
           <div class="row">
-            TODO: 썸네일 이미지 리스트 가져오는 로직 후 구현
+            
+            <div class="col-lg-3 col-md-4 col-sm-2" 
+              :key="item.id" 
+              v-for="item in productImage.filter(c => c.type === 1)">
+              <div class="position-relative">
+                <img :src="`/static/img/${item.product_id}/${item.type}/${item.path}`" class="img-fluid">
+                <div class="position-absolute top-0 end-0" style="cursor:pointer;" @click="deleteImage(item.id)">X</div>
+              </div>
+            </div>
+
           </div>
           <input type="file" 
                 class="form-control" 
@@ -37,7 +46,16 @@
         <label class="col-md-3 col-form-label">제품 이미지</label>
         <div class="col-md-9">
           <div class="row">
-            TODO: 제품 이미지 리스트 가져오는 로직 후 구현
+
+            <div class="col-lg-3 col-md-4 col-sm-2" 
+              :key="item.id" 
+              v-for="item in productImage.filter(c => c.type === 2)">
+              <div class="position-relative">
+                <img :src="`/static/img/${item.product_id}/${item.type}/${item.path}`" class="img-fluid">
+                <div class="position-absolute top-0 end-0" style="cursor:pointer;" @click="deleteImage(item.id)">X</div>
+              </div>
+            </div>
+
           </div>
           <input type="file" 
                 class="form-control" 
@@ -58,7 +76,16 @@
         <label class="col-md-3 col-form-label">제품설명 이미지</label>
         <div class="col-md-9">
           <div class="row">
-            TODO: 제품설명 이미지 리스트 가져오는 로직 후 구현
+
+           <div class="col-lg-3 col-md-4 col-sm-2" 
+              :key="item.id" 
+              v-for="item in productImage.filter(c => c.type === 3)">
+              <div class="position-relative">
+                <img :src="`/static/img/${item.product_id}/${item.type}/${item.path}`" class="img-fluid">
+                <div class="position-absolute top-0 end-0" style="cursor:pointer;" @click="deleteImage(item.id)">X</div>
+              </div>
+            </div>
+
           </div>
           <input type="file" 
                 class="form-control" 
@@ -84,6 +111,7 @@
 </template>
 
 <script>
+
 export default {
   data() {
     return {
@@ -95,20 +123,28 @@ export default {
   created() {
     this.productId = this.$route.query.product_id;    
     this.productDetail = this.$store.state.sallerSelectedProduct;
+    this.getProductImage();
   },
   methods: {
+    async getProductImage() {
+      this.productImage = await this.$get(`/api/productImageList/${this.productDetail.id}`);
+    },
     async uploadFile(files, type){
       console.log(files);
       console.log(type);
-      const image = await this.$base64(files[0]);
+      const image = await this.$base64(files[0]); // base64(mixin에 있음)
       const formData = { image };
       const {error} = await this.$post(`/api/upload/${this.productDetail.id}/${type}`, formData);
       console.log(error);
+    },
+    async deleteImage(id) {
+      console.log(id);
+      this.delImage = await this.$delete(`/api/productImageDelete/${this.productDetail.id}`)
     }
   }
 }
 </script>
 
 <style>
-
+  
 </style>

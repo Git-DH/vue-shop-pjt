@@ -27,7 +27,7 @@ export default {
                 fr.onload = e => {
                     resolve(e.target.result);
                 }
-                fr.readAsDataURL(file);
+                fr.readAsDataURL(file); // 넘어 온 파일정보를 읽는 것
             });
         }
     }
