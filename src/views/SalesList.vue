@@ -20,7 +20,11 @@
         </thead>
         <tbody>
           <tr v-for="(product, idx) in productList" :key="product.id">
-            <td></td>
+            <td>
+              <img v-if="product.path !== null" 
+                  :src="`/static/img/${product.id}/1/${product.path}`"
+                  style="height: 50px; width: auto;">
+            </td>
             <td>{{ product.product_name }}</td>
             <td>{{ product.product_price }}</td>
             <td>{{ product.delivery_price }}</td>
